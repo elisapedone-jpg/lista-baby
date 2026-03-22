@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Lista Baby - Andrea & Elisa</title>
+<meta name="description" content="Lista nascita di Andrea & Elisa. Contribuisci ai regali per il nostro piccolo in arrivo!">
+<meta property="og:title" content="Lista Baby - Andrea & Elisa 🌿">
+<meta property="og:description" content="Il nostro piccolo nido sta prendendo forma. Aiutaci a preparare tutto!">
+<meta property="og:type" content="website">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Inter',system-ui,-apple-system,sans-serif;background:#f4f2ec;color:#3a3a3a;min-height:100vh;-webkit-font-smoothing:antialiased}
+.hero{background:linear-gradient(160deg,#9aac8e 0%,#b3bc8a 40%,#d6cfa0 75%,#e8dfa5 100%);padding:44px 20px 36px;text-align:center;position:relative}
+.hero-label{font-size:11px;letter-spacing:4px;text-transform:uppercase;color:rgba(255,255,255,.8);margin-bottom:6px;font-weight:700}
+.hero h1{font-size:30px;font-weight:300;color:#fff;letter-spacing:.5px;margin-bottom:2px}
+.hero p{color:rgba(255,255,255,.8);font-size:13px;font-weight:400}
+.admin-btn{position:absolute;top:16px;right:16px;background:rgba(255,255,255,.2);border:none;border-radius:50%;width:36px;height:36px;display:flex;align-items:center;justify-content:center;cursor:pointer;color:rgba(255,255,255,.6);transition:background .2s}
+.admin-btn:hover{background:rgba(255,255,255,.35)}
+.container{max-width:700px;margin:0 auto;padding:20px 16px 40px}
+.gift-card{background:#fff;border-radius:14px;padding:16px 18px;border:1px solid #e8e5df;margin-bottom:10px;transition:border-color .2s}
+.gift-card.complete{border:1.5px solid #8a9a7e;opacity:.8}
+.gift-row{display:flex;align-items:flex-start;gap:12px}
+.gift-icon{width:36px;height:36px;border-radius:10px;background:linear-gradient(135deg,#9aac8e,#c5cda0);display:flex;align-items:center;justify-content:center;color:#fff;flex-shrink:0;margin-top:1px}
+.gift-icon.done{background:#e8e5df;color:#8a9a7e}
+.gift-body{flex:1;min-width:0}
+.gift-header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px}
+.gift-name{font-size:14px;font-weight:600;line-height:1.35;flex:1;padding-right:8px}
+.badge{background:#8a9a7e;color:#fff;font-size:10px;padding:3px 10px;border-radius:10px;font-weight:700;white-space:nowrap}
+.gift-stats{display:flex;justify-content:space-between;font-size:12px;color:#999;margin-bottom:5px}
+.gift-pct{font-weight:700}
+.bar-bg{height:6px;background:#f0ede7;border-radius:3px;overflow:hidden;margin-bottom:12px}
+.bar-fill{height:100%;border-radius:3px;transition:width .5s ease}
+.gift-actions{display:flex;gap:8px}
+.btn-contribute{flex:1;background:linear-gradient(135deg,#8a9a7e,#a5aa6a);color:#fff;border:none;border-radius:10px;padding:9px 0;font-size:12px;font-weight:600;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:5px;transition:opacity .2s}
+.btn-contribute:hover{opacity:.9}
+.btn-view{min-width:110px;text-align:center;background:#f5f3ee;color:#6b7c6b;border:none;border-radius:10px;padding:9px 14px;font-size:12px;font-weight:600;cursor:pointer;text-decoration:none;display:flex;align-items:center;justify-content:center;gap:5px;transition:background .2s}
+.btn-view:hover{background:#eeece4}
+.btn-view.full{flex:1;min-width:0}
+.footer{text-align:center;color:#c5bfa8;font-size:11px;padding:0 16px;margin-top:14px}
+.overlay{position:fixed;inset:0;background:rgba(0,0,0,.35);display:flex;align-items:center;justify-content:center;z-index:999;padding:16px;backdrop-filter:blur(3px);opacity:0;transition:opacity .2s;pointer-events:none}
+.overlay.open{opacity:1;pointer-events:all}
+.modal{background:#fff;border-radius:20px;width:100%;max-width:400px;max-height:88vh;overflow:auto;position:relative;transform:translateY(20px);transition:transform .2s}
+.overlay.open .modal{transform:translateY(0)}
+.modal-admin{max-width:480px}
+.modal-close{position:absolute;top:12px;right:12px;background:none;border:none;cursor:pointer;color:#bbb;padding:4px}
+.modal-inner{padding:28px 22px 22px}
+.modal-title{font-size:17px;font-weight:600;margin:0 0 4px;padding-right:30px;line-height:1.3}
+.modal-sub{color:#999;font-size:12px;margin:0 0 20px}
+.field-label{font-size:12px;font-weight:600;color:#666;display:block;margin-bottom:5px}
+.field-input{width:100%;padding:10px 14px;border:1.5px solid #e0ddd5;border-radius:10px;font-size:14px;margin-bottom:14px;outline:none;background:#fafaf7;font-family:inherit;transition:border-color .2s}
+.field-input:focus{border-color:#8a9a7e}
+.field-input.error{border-color:#d9534f}
+.btn-primary{width:100%;background:linear-gradient(135deg,#8a9a7e,#a5aa6a);color:#fff;border:none;border-radius:10px;padding:11px;font-size:13px;font-weight:600;cursor:pointer;font-family:inherit;transition:opacity .2s}
+.btn-primary:hover{opacity:.9}
+.btn-primary:disabled{background:#d5d0c5;cursor:default;opacity:1}
+.bank-box{background:#f9f8f4;border-radius:14px;padding:16px;margin-bottom:14px;border:1px solid #e8e5df}
+.bank-title{font-size:12px;font-weight:700;color:#6b7c6b;margin:0 0 10px}
+.bank-details{font-size:12.5px;line-height:1.9;color:#555}
+.bank-causale{background:#fff;border-radius:8px;padding:8px 12px;margin-top:4px;font-size:11.5px;color:#444;border:1px solid #e8e5df;word-break:break-word;line-height:1.5}
+.btn-copy{margin-top:10px;background:#fff;border:1.5px solid #8a9a7e;border-radius:8px;padding:7px 14px;font-size:12px;color:#6b7c6b;cursor:pointer;display:inline-flex;align-items:center;gap:5px;font-weight:600;font-family:inherit;transition:background .2s}
+.btn-copy:hover{background:#f5f3ee}
+.btn-row{display:flex;gap:8px}
+.btn-back{padding:11px 16px;background:#f0ede7;border:none;border-radius:10px;font-size:12px;color:#999;cursor:pointer;font-weight:600;font-family:inherit}
+.btn-confirm{flex:1;background:linear-gradient(135deg,#8a9a7e,#a5aa6a);color:#fff;border:none;border-radius:10px;padding:11px;font-size:13px;font-weight:600;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:5px;font-family:inherit}
+.success-icon{width:52px;height:52px;border-radius:50%;background:#8a9a7e;display:flex;align-items:center;justify-content:center;margin:0 auto 14px;color:#fff}
+.admin-section{background:#f9f8f4;border-radius:14px;padding:16px;margin-bottom:20px;border:1px solid #e8e5df}
+.admin-section-title{font-size:13px;font-weight:700;color:#5a6b52;margin:0 0 12px}
+.admin-input{width:100%;padding:9px 12px;border:1.5px solid #e0ddd5;border-radius:8px;font-size:13px;margin-bottom:8px;outline:none;background:#fff;font-family:inherit}
+.admin-input:focus{border-color:#8a9a7e}
+.admin-input-row{display:flex;gap:8px;margin-bottom:8px}
+.admin-input-row input{flex:1}
+.btn-add{background:#5a6b52;color:#fff;border:none;border-radius:8px;padding:9px 20px;font-size:12px;font-weight:600;cursor:pointer;display:inline-flex;align-items:center;gap:5px;font-family:inherit}
+.btn-add:disabled{background:#d5d0c5;cursor:default}
+.admin-gift{display:flex;align-items:center;gap:10px;background:#f9f8f4;border-radius:10px;padding:10px 12px;border:1px solid #e8e5df;margin-bottom:6px}
+.admin-gift-info{flex:1;min-width:0}
+.admin-gift-name{font-size:13px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.admin-gift-meta{font-size:11px;color:#999}
+.btn-reset{background:#fff3cd;border:1px solid #e0d08a;border-radius:8px;padding:6px 10px;font-size:11px;color:#8a7a2a;cursor:pointer;display:flex;align-items:center;gap:4px;font-weight:600;white-space:nowrap;flex-shrink:0;font-family:inherit}
+.btn-delete{background:#fde8e8;border:1px solid #f0c0c0;border-radius:8px;padding:6px 10px;font-size:11px;color:#c0392b;cursor:pointer;display:flex;align-items:center;gap:4px;font-weight:600;white-space:nowrap;flex-shrink:0;font-family:inherit}
+.btn-confirm-del{background:#d9534f;color:#fff;border:none;border-radius:8px;padding:6px 10px;font-size:11px;cursor:pointer;font-weight:600;font-family:inherit}
+.btn-cancel-del{background:#e8e5df;color:#666;border:none;border-radius:8px;padding:6px 8px;font-size:11px;cursor:pointer;font-weight:600;font-family:inherit}
+.error-text{color:#d9534f;font-size:12px;margin:-8px 0 10px}
+.loading{min-height:100vh;display:flex;align-items:center;justify-content:center;background:#f4f2ec}
+.loading p{color:#8a9a7e;font-size:16px}
+@media(max-width:400px){.gift-name{font-size:13px}.btn-view{min-width:90px;font-size:11px;padding:9px 10px}}
+</style>
+</head>
+<body>
+
+<div id="app">
+  <div class="loading"><p>Caricamento lista...</p></div>
+</div>
+
+<script type="module">
+import{initializeApp}from"https://www.gstatic.com/firebasejs/12.11.0/firebase-app.js";
+import{getFirestore,doc,getDoc,setDoc,onSnapshot}from"https://www.gstatic.com/firebasejs/12.11.0/firebase-firestore.js";
+
+const firebaseConfig={
+  apiKey:"AIzaSyDxWFchDvpRr08C3l1osjxUYEFILtsEfoE",
+  authDomain:"lista-baby.firebaseapp.com",
+  projectId:"lista-baby",
+  storageBucket:"lista-baby.firebasestorage.app",
+  messagingSenderId:"607449847043",
+  appId:"1:607449847043:web:7957fb3d24629e95658536"
+};
+
+const fbApp=initializeApp(firebaseConfig);
+const db=getFirestore(fbApp);
+
+const DEFAULT_GIFTS=[
+  {id:"s1",name:"Cestino Pannolini Usati",price:14,link:"https://www.boots.com/tommee-tippee-twist-and-click-advanced-nappyd-disposal-bins-system-white-10259522"},
+  {id:"s2",name:"Lenzuolini - Opzione 1 (Safari)",price:15,link:"https://www.dunelm.com/product/safari-natural-100-cotton-pack-of-2-fitted-sheets-1000167433"},
+  {id:"s3",name:"Lenzuolini - Opzione 2 (John Lewis)",price:24,link:"https://www.johnlewis.com/john-lewis-safari-print-cotton-fitted-cotbed-sheet-70-x-140cm-pack-of-2/p5401791"},
+  {id:"s4",name:"Changing Bag",price:80,link:"https://www.next.co.uk/style/su697251/w24060"},
+  {id:"s5",name:"Copertina Leggera (Zara Home)",price:40,link:"https://www.zarahome.com/gb/knit-baby-blanket-l43699004"},
+  {id:"s6",name:"Fleece con palloncini ricamati",price:20,link:"https://www.zarahome.com/gb/fleece-baby-blanket-with-embroidered-balloons-l40610004"},
+  {id:"s7",name:"Scialle Sage Green (Neutrum Bear)",price:30,link:"https://neutrumbear.com/products/luxury-pram-cosy-lined-2/?attribute_pa_colour=sage-green&attribute_pa_personalisation=no"},
+  {id:"s8",name:"Sacca Nanna",price:20,link:"https://www.next.co.uk/style/su824252/h74513"},
+  {id:"m1",name:"Vaschetta Neonato (Aquascale Digital)",price:60,link:"https://www.mamasandpapas.com/products/aquascale-bath-v3-digital-baby-bath-544802701"},
+  {id:"m2",name:"Changing Table",price:72.83,link:"https://www.amazon.co.uk/dp/B0DG8XWB7F/"},
+  {id:"m3",name:"Sterilizzatore (Tommee Tippee Kit Completo)",price:99.99,link:"https://www.boots.com/tommee-tippee-complete-feeding-kit-black-10324037"},
+  {id:"m4",name:"Materassino Culletta (IKEA)",price:75,link:"https://www.ikea.com/gb/en/p/skoenast-foam-mattress-for-cot-70593593/"},
+  {id:"m5",name:"Palestrina / Tappetino Tummy Time",price:69.41,link:"https://www.amazon.co.uk/Ingenuity-Reversible-Duvet-Activity-Loamy/dp/B0812LDHDL/"},
+  {id:"g1",name:"Carrycot + Stroller + Footmuff + Seat Liner + Raincover",price:234,link:"https://icklebubba.com/products/stomp-urban-10-piece-travel-system-with-i-size-cirrus-car-seat-isofix-base?variant=48096053887260"},
+  {id:"g2",name:"Car Seat + ISOFIX Base + Window Blinds",price:145,link:""},
+  {id:"g3",name:"Seggiolone Evolutivo (Kinderkraft)",price:138,link:"https://www.amazon.co.uk/Kinderkraft-Highchair-Multifunctional-Ajustable-Detachable/dp/B0DDPRML5J/"},
+  {id:"g4",name:"Culletta con Cassetto (IKEA Myllra)",price:379,link:"https://www.ikea.com/gb/en/p/myllra-cot-with-drawer-beige-80597048/"},
+  {id:"g5",name:"Marsupio (BabyBjörn Mini)",price:89,link:"https://www.babybjorn.co.uk/products/baby-carriers/baby-carrier-mini/vintage-indigo-woven/"}
+];
+
+const ADMIN_PWD="Fagiolino26";
+const fmt=v=>`£${v.toFixed(2)}`;
+
+const SVG={
+  gift:`<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 12 20 22 4 22 4 12"/><rect x="2" y="7" width="20" height="5"/><line x1="12" y1="22" x2="12" y2="7"/><path d="M12 7H7.5a2.5 2.5 0 010-5C11 2 12 7 12 7z"/><path d="M12 7h4.5a2.5 2.5 0 000-5C13 2 12 7 12 7z"/></svg>`,
+  heart:`<svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>`,
+  ext:`<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>`,
+  check:`<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>`,
+  x:`<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>`,
+  copy:`<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>`,
+  gear:`<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg>`,
+  trash:`<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a2 2 0 012-2h4a2 2 0 012 2v2"/></svg>`,
+  reset:`<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 102.13-9.36L1 10"/></svg>`,
+  plus:`<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>`
+};
+
+let gifts=[...DEFAULT_GIFTS];
+let contribs={};
+let state={modal:null,step:1,name:"",amount:"",copied:false,done:false,adminOpen:false,adminAuth:false,pwdInput:"",pwdError:false,newGift:{name:"",price:"",link:""},confirmDelete:null};
+
+const giftsRef=doc(db,"registry","gifts");
+const contribsRef=doc(db,"registry","contributions");
+
+async function initData(){
+  try{
+    const gSnap=await getDoc(giftsRef);
+    if(gSnap.exists())gifts=gSnap.data().items||DEFAULT_GIFTS;
+    else await setDoc(giftsRef,{items:DEFAULT_GIFTS});
+  }catch(e){console.error(e)}
+  try{
+    const cSnap=await getDoc(contribsRef);
+    if(cSnap.exists())contribs=cSnap.data()||{};
+  }catch(e){console.error(e)}
+  onSnapshot(giftsRef,s=>{if(s.exists()){gifts=s.data().items||[];render()}});
+  onSnapshot(contribsRef,s=>{if(s.exists()){contribs=s.data()||{};render()}});
+  render();
+}
+
+async function saveGifts(){try{await setDoc(giftsRef,{items:gifts})}catch(e){console.error(e)}}
+async function saveContribs(){try{await setDoc(contribsRef,contribs)}catch(e){console.error(e)}}
+
+function render(){
+  const app=document.getElementById("app");
+  app.innerHTML=`
+    <div class="hero">
+      <button class="admin-btn" onclick="openAdmin()">${SVG.gear}</button>
+      <div class="hero-label">LISTA BABY</div>
+      <h1>Andrea & Elisa</h1>
+      <p>Il nostro piccolo nido sta prendendo forma 🌿</p>
+    </div>
+    <div class="container">
+      ${gifts.map(g=>{
+        const raised=contribs[g.id]||0;
+        const pct=Math.round((raised/g.price)*100);
+        const complete=pct>=100;
+        const barColor=complete?"#8a9a7e":"linear-gradient(90deg,#9aac8e,#d1ca82)";
+        const pctColor=pct>=100?"#8a9a7e":pct>50?"#a5aa6a":"#c0a44e";
+        return`<div class="gift-card ${complete?'complete':''}">
+          <div class="gift-row">
+            <div class="gift-icon ${complete?'done':''}">${SVG.gift}</div>
+            <div class="gift-body">
+              <div class="gift-header">
+                <div class="gift-name">${g.name}</div>
+                ${complete?'<span class="badge">Completato ✓</span>':''}
+              </div>
+              <div class="gift-stats">
+                <span>${fmt(raised)} di ${fmt(g.price)}</span>
+                <span class="gift-pct" style="color:${pctColor}">${pct}%</span>
+              </div>
+              <div class="bar-bg"><div class="bar-fill" style="width:${Math.min(pct,100)}%;background:${barColor}"></div></div>
+              <div class="gift-actions">
+                ${!complete?`<button class="btn-contribute" onclick="openContrib('${g.id}')">${SVG.heart} Contribuisci</button>`:''}
+                ${g.link?`<a href="${g.link}" target="_blank" rel="noopener noreferrer" class="btn-view ${complete?'full':''}">${complete?'':''}Vedi regalo ${SVG.ext}</a>`:''}
+              </div>
+            </div>
+          </div>
+        </div>`;
+      }).join("")}
+    </div>
+    <p class="footer">Grazie di cuore per il vostro contributo 🌿</p>
+    ${renderContribModal()}
+    ${renderAdminModal()}
+  `;
+}
+
+function renderContribModal(){
+  const g=state.modal?gifts.find(x=>x.id===state.modal):null;
+  if(!g)return'<div class="overlay" id="contribModal"></div>';
+  const raised=contribs[g.id]||0;
+  const maxLeft=g.price-raised;
+  let body="";
+  if(state.done){
+    body=`<div style="text-align:center;padding:16px 0">
+      <div class="success-icon">${SVG.check}</div>
+      <h3 style="font-size:17px;margin:0 0 6px">Grazie, ${esc(state.name)}!</h3>
+      <p style="color:#999;font-size:13px;margin:0 0 18px">Il tuo contributo è stato registrato.</p>
+      <button class="btn-primary" style="width:auto;padding:10px 30px" onclick="closeContrib()">Chiudi</button>
+    </div>`;
+  }else if(state.step===1){
+    body=`
+      <label class="field-label">Il tuo nome</label>
+      <input class="field-input" id="cName" value="${esc(state.name)}" placeholder="es. Marco" oninput="state.name=this.value">
+      <label class="field-label">Quanto vuoi contribuire (£)</label>
+      <input class="field-input" id="cAmount" value="${esc(state.amount)}" placeholder="Max ${fmt(maxLeft)}" inputmode="decimal" oninput="state.amount=this.value.replace(/[^0-9.]/g,'')">
+      <button class="btn-primary" ${(!state.name.trim()||!state.amount||Number(state.amount)<=0)?'disabled':''} onclick="goStep2()">Avanti →</button>`;
+  }else{
+    const causale=`Lista Baby - ${g.name} - ${state.name||"tuo nome"}`;
+    body=`
+      <div class="bank-box">
+        <p class="bank-title">Dettagli per il bonifico</p>
+        <div class="bank-details">
+          <div><strong>Intestatario:</strong> Andrea Chiarenza & Elisa Pedone</div>
+          <div><strong>IBAN:</strong> GB33 REVO 2301 2034 7187 31</div>
+          <div><strong>BIC / SWIFT:</strong> REVOGB21</div>
+          <div><strong>Importo:</strong> ${fmt(Number(state.amount))}</div>
+          <div style="margin-top:8px"><strong>Causale:</strong></div>
+          <div class="bank-causale" id="causaleText">${esc(causale)}</div>
+        </div>
+        <button class="btn-copy" onclick="copyCausale()">${SVG.copy} ${state.copied?'Copiata!':'Copia causale'}</button>
+      </div>
+      <div class="btn-row">
+        <button class="btn-back" onclick="goStep1()">← Indietro</button>
+        <button class="btn-confirm" onclick="confirmContrib()">${SVG.check} Ho fatto il bonifico</button>
+      </div>`;
+  }
+  return`<div class="overlay ${state.modal?'open':''}" onclick="closeContrib()">
+    <div class="modal" onclick="event.stopPropagation()">
+      <button class="modal-close" onclick="closeContrib()">${SVG.x}</button>
+      <div class="modal-inner">
+        <h2 class="modal-title">${esc(g.name)}</h2>
+        <p class="modal-sub">Prezzo: ${fmt(g.price)} — Raccolto: ${fmt(raised)}</p>
+        ${body}
+      </div>
+    </div>
+  </div>`;
+}
+
+function renderAdminModal(){
+  if(!state.adminOpen)return'';
+  let body="";
+  if(!state.adminAuth){
+    body=`
+      <label class="field-label">Password</label>
+      <input class="field-input ${state.pwdError?'error':''}" type="password" id="adminPwd" value="${esc(state.pwdInput)}" placeholder="Inserisci password" oninput="state.pwdInput=this.value;state.pwdError=false" onkeydown="if(event.key==='Enter')tryLogin()">
+      ${state.pwdError?'<p class="error-text">Password errata</p>':''}
+      <button class="btn-primary" style="margin-top:8px" onclick="tryLogin()">Accedi</button>`;
+  }else{
+    const giftRows=gifts.map(g=>{
+      const raised=contribs[g.id]||0;
+      const deleting=state.confirmDelete===g.id;
+      return`<div class="admin-gift">
+        <div class="admin-gift-info">
+          <div class="admin-gift-name">${esc(g.name)}</div>
+          <div class="admin-gift-meta">${fmt(g.price)} — raccolto: ${fmt(raised)}</div>
+        </div>
+        ${raised>0?`<button class="btn-reset" onclick="resetContrib('${g.id}')">${SVG.reset} Azzera</button>`:''}
+        ${deleting?`<button class="btn-confirm-del" onclick="deleteGift('${g.id}')">Conferma</button><button class="btn-cancel-del" onclick="cancelDelete()">No</button>`
+        :`<button class="btn-delete" onclick="confirmDeleteGift('${g.id}')">${SVG.trash} Elimina</button>`}
+      </div>`;
+    }).join("");
+    body=`
+      <div class="admin-section">
+        <p class="admin-section-title">Aggiungi regalo</p>
+        <input class="admin-input" id="newName" value="${esc(state.newGift.name)}" placeholder="Nome regalo" oninput="state.newGift.name=this.value">
+        <div class="admin-input-row">
+          <input class="admin-input" style="margin:0" id="newPrice" value="${esc(state.newGift.price)}" placeholder="Prezzo (£)" inputmode="decimal" oninput="state.newGift.price=this.value.replace(/[^0-9.]/g,'')">
+          <input class="admin-input" style="margin:0;flex:2" id="newLink" value="${esc(state.newGift.link)}" placeholder="Link (opzionale)" oninput="state.newGift.link=this.value">
+        </div>
+        <button class="btn-add" ${(!state.newGift.name.trim()||!state.newGift.price)?'disabled':''} onclick="addGift()">${SVG.plus} Aggiungi</button>
+      </div>
+      <p class="admin-section-title">Regali attuali</p>
+      ${giftRows}`;
+  }
+  return`<div class="overlay open" onclick="closeAdmin()">
+    <div class="modal modal-admin" onclick="event.stopPropagation()">
+      <button class="modal-close" onclick="closeAdmin()">${SVG.x}</button>
+      <div class="modal-inner">
+        <h2 style="font-size:18px;font-weight:700;margin:0 0 4px;color:#5a6b52">Pannello Admin</h2>
+        <p class="modal-sub">Gestisci regali e contributi</p>
+        ${body}
+      </div>
+    </div>
+  </div>`;
+}
+
+function esc(s){return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;")}
+
+window.openContrib=id=>{state.modal=id;state.step=1;state.name="";state.amount="";state.copied=false;state.done=false;render()};
+window.closeContrib=()=>{state.modal=null;render()};
+window.goStep1=()=>{state.step=1;render()};
+window.goStep2=()=>{if(state.name.trim()&&state.amount&&Number(state.amount)>0){state.step=2;render()}};
+window.confirmContrib=()=>{
+  const g=gifts.find(x=>x.id===state.modal);if(!g)return;
+  const a=Number(state.amount);if(!state.name.trim()||!a||a<=0)return;
+  const prev=contribs[g.id]||0;const left=g.price-prev;if(left<=0)return;
+  contribs[g.id]=prev+Math.min(a,left);
+  saveContribs();state.done=true;render();
+};
+window.copyCausale=async()=>{
+  const g=gifts.find(x=>x.id===state.modal);if(!g)return;
+  const c=`Lista Baby - ${g.name} - ${state.name||"tuo nome"}`;
+  try{await navigator.clipboard.writeText(c)}catch{}
+  state.copied=true;render();setTimeout(()=>{state.copied=false;render()},2000);
+};
+window.openAdmin=()=>{state.adminOpen=true;state.adminAuth=false;state.pwdInput="";state.pwdError=false;state.confirmDelete=null;state.newGift={name:"",price:"",link:""};render()};
+window.closeAdmin=()=>{state.adminOpen=false;render()};
+window.tryLogin=()=>{if(state.pwdInput===ADMIN_PWD){state.adminAuth=true;state.pwdError=false}else state.pwdError=true;render()};
+window.resetContrib=id=>{delete contribs[id];saveContribs();render()};
+window.confirmDeleteGift=id=>{state.confirmDelete=id;render()};
+window.cancelDelete=()=>{state.confirmDelete=null;render()};
+window.deleteGift=id=>{gifts=gifts.filter(g=>g.id!==id);delete contribs[id];saveGifts();saveContribs();state.confirmDelete=null;render()};
+window.addGift=()=>{
+  if(!state.newGift.name.trim()||!state.newGift.price)return;
+  gifts.push({id:"g_"+Date.now(),name:state.newGift.name.trim(),price:Number(state.newGift.price),link:state.newGift.link.trim()});
+  saveGifts();state.newGift={name:"",price:"",link:""};render();
+};
+
+initData();
+</script>
+</body>
+</html>
