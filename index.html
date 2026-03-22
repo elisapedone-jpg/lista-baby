@@ -232,10 +232,10 @@ function renderContribModal(){
   }else if(state.step===1){
     body=`
       <label class="field-label">Il tuo nome</label>
-      <input class="field-input" id="cName" value="${esc(state.name)}" placeholder="es. Marco" oninput="state.name=this.value">
+      <input class="field-input" id="cName" value="${esc(state.name)}" placeholder="es. Marco" oninput="state.name=this.value;updateBtn()">
       <label class="field-label">Quanto vuoi contribuire (£)</label>
-      <input class="field-input" id="cAmount" value="${esc(state.amount)}" placeholder="Max ${fmt(maxLeft)}" inputmode="decimal" oninput="state.amount=this.value.replace(/[^0-9.]/g,'')">
-      <button class="btn-primary" ${(!state.name.trim()||!state.amount||Number(state.amount)<=0)?'disabled':''} onclick="goStep2()">Avanti →</button>`;
+      <input class="field-input" id="cAmount" value="${esc(state.amount)}" placeholder="Max ${fmt(maxLeft)}" inputmode="decimal" oninput="state.amount=this.value.replace(/[^0-9.]/g,'');this.value=state.amount;updateBtn()">
+      <button class="btn-primary" onclick="goStep2()">Avanti →</button>`;
   }else{
     const causale=`Lista Baby - ${g.name} - ${state.name||"tuo nome"}`;
     body=`
@@ -321,7 +321,16 @@ function esc(s){return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").repl
 window.openContrib=id=>{state.modal=id;state.step=1;state.name="";state.amount="";state.copied=false;state.done=false;render()};
 window.closeContrib=()=>{state.modal=null;render()};
 window.goStep1=()=>{state.step=1;render()};
-window.goStep2=()=>{if(state.name.trim()&&state.amount&&Number(state.amount)>0){state.step=2;render()}};
+window.goStep2=()=>{
+  state.name=document.getElementById("cName")?.value||state.name;
+  state.amount=(document.getElementById("cAmount")?.value||state.amount).replace(/[^0-9.]/g,"");
+  if(state.name.trim()&&state.amount&&Number(state.amount)>0){state.step=2;render()}
+};
+window.updateBtn=()=>{
+  const b=document.querySelector(".btn-primary");if(!b)return;
+  const ok=state.name.trim()&&state.amount&&Number(state.amount)>0;
+  b.disabled=!ok;
+};
 window.confirmContrib=()=>{
   const g=gifts.find(x=>x.id===state.modal);if(!g)return;
   const a=Number(state.amount);if(!state.name.trim()||!a||a<=0)return;
